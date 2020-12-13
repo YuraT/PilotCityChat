@@ -1,0 +1,16 @@
+version: '2.4'
+
+services:
+  frontend:
+    image: frontend
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+    - ./:/usr/src/app/
+    - /usr/src/app/node_modules
+    environment:
+      NODE_ENV: development
+    ports:
+      - 8080:8080
+    command: ["npm", "run", "serve"]
