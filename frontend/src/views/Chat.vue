@@ -16,7 +16,7 @@
           :is-owned="message.user == currentUser._id"
           :content="message.text"
           :name="userOfId(message.user).username"
-          :timestamp="formatTime(message.createdAt)"
+          :timestamp="formatTime(message._id.getTimestamp())"
           :group-with-prev-msg="
             sameSenderAndTime(message, currentMessages[index - 1])
           "
@@ -161,9 +161,9 @@ const Chat = Vue.extend({
     },
     sameSenderAndTime(msg, prevMsg) {
       if (prevMsg) {
-        let msgTime = moment(msg.createdAt).calendar();
-        let prevMsgTime = moment(prevMsg.createdAt).calendar();
-        return msg.userId == prevMsg.userId && msgTime == prevMsgTime;
+        let msgTime = moment(msg._id.getTimestamp()).calendar();
+        let prevMsgTime = moment(prevMsg._id.getTimestamp()).calendar();
+        return msg.user == prevMsg.user && msgTime == prevMsgTime;
       } else return false;
     }
   },
