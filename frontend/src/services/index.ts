@@ -22,8 +22,7 @@ export const roomService = client.service("rooms");
 import * as Realm from "realm-web";
 import * as Users from "./users";
 import * as Rooms from "./rooms";
-// const users = require("./users.ts");
-// const schemas = require("./schemas.ts");
+import * as Messages from "./messages"
 
 const app = new Realm.App({
   id: "chatrooms-pezkx",
@@ -33,3 +32,4 @@ const app = new Realm.App({
 export { app };
 export { Users };
 export { Rooms };
+export { Messages };

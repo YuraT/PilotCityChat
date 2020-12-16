@@ -170,6 +170,8 @@ const Chat = Vue.extend({
   async created() {
     // this.windowHeight = document.getElementById("chatWindow").clientHeight;
 
+    await services.Messages.findMessages();
+
     await this.$store.dispatch("fetchRooms");
     if (this.$store.state.rooms[0]) {
       this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]);

@@ -86,7 +86,7 @@ export const store = new Vuex.Store<State>({
     },
     fetchRoomMessages: async (context, payload: ObjectId | string ) => {
       try {
-        let messages = await services.Rooms.findMessages(payload);
+        let messages = await services.Messages.findMessages({room: new ObjectId(payload)});
         context.commit("fetchRoomMessages", { roomId: payload, messages: messages })
       } catch (e) {
         console.log("fetchRoomMessages exception: ", e);
