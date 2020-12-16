@@ -72,7 +72,6 @@ export const store = new Vuex.Store<State>({
         console.log("fetchRooms exception: ", e);
       }
     },
-    // TODO: this
     fetchUsers: async context => {
       try {
         let users = await services.Users.findUsers();
