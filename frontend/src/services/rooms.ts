@@ -1,14 +1,14 @@
 import { Room } from "@/@types";
-import * as services from "@/services";
+import { app } from "@/services";
 
 export async function createRoom(roomName: String) {
   // does not work yet, will probably do this with a cloud function
-  const mongo = services.app.currentUser?.mongoClient("mongodb-atlas");
+  const mongo = app.currentUser?.mongoClient("mongodb-atlas");
   const mongoCollection = mongo?.db("chatrooms").collection("rooms");
   try {
     const result = await mongoCollection?.insertOne({
-      owner: services.app.currentUser?.id,
-      members: [services.app.currentUser?.id],
+      owner: app.currentUser?.id,
+      members: [app.currentUser?.id],
       name: roomName,
       messages: []
     });
@@ -20,7 +20,7 @@ export async function createRoom(roomName: String) {
 }
 
 export async function findRooms(): Promise<Array<Room> | undefined> {
-  const mongo = services.app.currentUser?.mongoClient("mongodb-atlas");
+  const mongo = app.currentUser?.mongoClient("mongodb-atlas");
   const mongoCollection = mongo?.db("chatrooms").collection("rooms");
   let findOptions = {
     projection: {
@@ -37,7 +37,7 @@ export async function findRooms(): Promise<Array<Room> | undefined> {
 }
 
 export async function watchRooms(callback: (change: any) => void) {
-  const mongo = services.app.currentUser?.mongoClient("mongodb-atlas");
+  const mongo = app.currentUser?.mongoClient("mongodb-atlas");
   const mongoCollection = mongo?.db("chatrooms").collection("rooms");
   if (mongoCollection) {
     for await (const change of mongoCollection?.watch()) {
