@@ -143,7 +143,7 @@ const Chat = Vue.extend({
 
   methods: {
     sendMessage() {
-      services.Rooms.sendMessage(this.currentRoom._id, this.newMessage);
+      services.Messages.sendMessage(this.currentRoom._id, this.newMessage);
       this.newMessage = "";
     },
     userOfId(id) {
@@ -165,19 +165,41 @@ const Chat = Vue.extend({
         let prevMsgTime = moment(prevMsg._id.getTimestamp()).calendar();
         return msg.user == prevMsg.user && msgTime == prevMsgTime;
       } else return false;
-    }
+    },
+    async watchMessages() {
+      // Im not sure why, but watchCollection breaks after a minute or two
+      // this a temporary solution to restart it when it breaks with a try catch
+      // TODO: research how to fix this properly
+      try {
+        await services.Messages.watchMessages(change => {
+          const { operationType } = change;
+          switch (operationType) {
+            case "insert": {
+              this.$store.dispatch("pushMessage", change.fullDocument);
+              // TODO: also add notifications here later
+            }
+          }
+        });
+      } catch (e) {
+        if (e.message.includes("execution time limit exceeded")) {
+          console.log("time limit error: ", e);
+          // restart the watcher if this error happens
+          // bloody recursion, this is terrible
+          this.watchMessages();
+        }
+        else console.log("message watching error: ", e);
+      }
+    },
   },
   async created() {
     // this.windowHeight = document.getElementById("chatWindow").clientHeight;
 
-    await services.Messages.findMessages();
-
     await this.$store.dispatch("fetchRooms");
     if (this.$store.state.rooms[0]) {
-      this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]);
+      this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]._id);
     }
-    // await this.$store.dispatch("fetchUsers");
-    // await this.$store.dispatch("fetchMessages");
+
+    this.watchMessages();
   }
 });
 export default Chat;
