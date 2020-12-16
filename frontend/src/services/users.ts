@@ -48,3 +48,20 @@ export async function logOut() {
     console.log("logOut error: ", e);
   }
 }
+
+export async function findUsers(): Promise<Array<UserData> | undefined> {
+  const mongo = app.currentUser?.mongoClient("mongodb-atlas");
+  const mongoCollection = mongo?.db("chatrooms").collection("users");
+  let findOptions = {
+    projection: {
+      messages: 0
+    }
+  };
+  try {
+    const result = await mongoCollection?.find({}, findOptions);
+    console.log("findUsers: ", result);
+    return result as Array<UserData>;
+  } catch (e) {
+    console.log("findUsers error:", e);
+  }
+}

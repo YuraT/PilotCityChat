@@ -147,8 +147,7 @@ const Chat = Vue.extend({
       this.newMessage = "";
     },
     userOfId(id) {
-      return { id: id, username: id };
-      // return this.users.filter(user => user._id == id)[0];
+      return this.users.find(user => user.userId == id);
     },
     formatTime(time) {
       let formattedTime = moment(time).calendar();
@@ -199,6 +198,7 @@ const Chat = Vue.extend({
     // this.windowHeight = document.getElementById("chatWindow").clientHeight;
     if (!this.$store.state.currentRoom) {
       await this.$store.dispatch("fetchRooms");
+      await this.$store.dispatch("fetchUsers");
       if (this.$store.state.rooms[0]) {
         this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]._id);
       }

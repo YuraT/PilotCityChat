@@ -75,7 +75,7 @@ export const store = new Vuex.Store<State>({
     // TODO: this
     fetchUsers: async context => {
       try {
-        let users = (await services.userService.find({})).data;
+        let users = await services.Users.findUsers();
         context.commit("fetchUsers", users);
       } catch (e) {
         console.log("fetchUsers exception: ", e);
