@@ -1,6 +1,4 @@
-import { ObjectId } from "bson";
-
-import { Message, Room } from "@/@types";
+import { Room } from "@/@types";
 import * as services from "@/services";
 
 export async function createRoom(roomName: String) {
@@ -38,41 +36,13 @@ export async function findRooms(): Promise<Array<Room> | undefined> {
   }
 }
 
-export async function findMessages(roomId: string | ObjectId): Promise<Array<Message> | undefined> {
-  const mongo = services.app.currentUser?.mongoClient("mongodb-atlas");
-  const mongoCollection = mongo?.db("chatrooms").collection("rooms");
-  let findOptions = {
-    projection: {
-      _id: 1,
-      messages: 1
-    }
-  };
-  try {
-    const result = await mongoCollection?.findOne({_id: new ObjectId(roomId)}, findOptions)
-    console.log("findMessages: ", result);
-    return (result as Room).messages as Array<Message>;
-  } catch (e) {
-    console.log("findMessages error:", e);
-  }
-}
-
-export async function watchRooms(callback: (change: { fullDocument: Room }) => void) {
+export async function watchRooms(callback: (change: any) => void) {
   const mongo = services.app.currentUser?.mongoClient("mongodb-atlas");
   const mongoCollection = mongo?.db("chatrooms").collection("rooms");
   if (mongoCollection) {
     for await (const change of mongoCollection?.watch()) {
       console.log("room change: ", change);
-      callback(change as {fullDocument: Room});
+      callback(change);
     }
-  }
-}
-
-export async function sendMessage(roomId: ObjectId, text: string) {
-  const user = services.app.currentUser;
-  try {
-    const result = await user?.callFunction("sendMessage", {roomId, text});
-    console.log("sendMessage: ", result);
-  } catch (e) {
-    console.log("sendMessage error: ", e);
   }
 }

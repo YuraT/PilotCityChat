@@ -16,7 +16,7 @@
           :is-owned="message.user == currentUser._id"
           :content="message.text"
           :name="userOfId(message.user).username"
-          :timestamp="formatTime(message.createdAt)"
+          :timestamp="formatTime(message._id.getTimestamp())"
           :group-with-prev-msg="
             sameSenderAndTime(message, currentMessages[index - 1])
           "
@@ -143,12 +143,11 @@ const Chat = Vue.extend({
 
   methods: {
     sendMessage() {
-      services.Rooms.sendMessage(this.currentRoom._id, this.newMessage);
+      services.Messages.sendMessage(this.currentRoom._id, this.newMessage);
       this.newMessage = "";
     },
     userOfId(id) {
-      return { id: id, username: id };
-      // return this.users.filter(user => user._id == id)[0];
+      return this.users.find(user => user.userId == id);
     },
     formatTime(time) {
       let formattedTime = moment(time).calendar();
@@ -161,21 +160,51 @@ const Chat = Vue.extend({
     },
     sameSenderAndTime(msg, prevMsg) {
       if (prevMsg) {
-        let msgTime = moment(msg.createdAt).calendar();
-        let prevMsgTime = moment(prevMsg.createdAt).calendar();
-        return msg.userId == prevMsg.userId && msgTime == prevMsgTime;
+        let msgTime = moment(msg._id.getTimestamp()).calendar();
+        let prevMsgTime = moment(prevMsg._id.getTimestamp()).calendar();
+        return msg.user == prevMsg.user && msgTime == prevMsgTime;
       } else return false;
-    }
+    },
+    async watchMessages() {
+      // Im not sure why, but watchCollection breaks after a minute or two
+      // this a temporary solution to restart it when it breaks with a try catch
+      // TODO: research how to fix this properly
+      let error = false;
+      while (!error) {
+        try {
+          await services.Messages.watchMessages(change => {
+            const { operationType } = change;
+            switch (operationType) {
+              case "insert": {
+                this.$store.dispatch("pushMessage", change.fullDocument);
+                // TODO: also add notifications here later
+              }
+            }
+          });
+        } catch (e) {
+          if (e.message.includes("execution time limit exceeded")) {
+            console.log("time limit error: ", e);
+            // restart the watcher if this error happens by not setting error
+          }
+          else { 
+            console.log("message watching error: ", e);
+            error = true;
+          }
+        }
+      }
+    },
   },
   async created() {
     // this.windowHeight = document.getElementById("chatWindow").clientHeight;
+    if (!this.$store.state.currentRoom) {
+      await this.$store.dispatch("fetchRooms");
+      await this.$store.dispatch("fetchUsers");
+      if (this.$store.state.rooms[0]) {
+        this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]._id);
+      }
 
-    await this.$store.dispatch("fetchRooms");
-    if (this.$store.state.rooms[0]) {
-      this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]);
+      this.watchMessages();
     }
-    // await this.$store.dispatch("fetchUsers");
-    // await this.$store.dispatch("fetchMessages");
   }
 });
 export default Chat;

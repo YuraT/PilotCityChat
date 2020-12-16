@@ -3,7 +3,6 @@ import Vuex from "vuex";
 import { ObjectId } from "bson";
 import * as services from "@/services/";
 import { Message, Room, UserData } from "@/@types";
-import { connect } from 'socket.io-client';
 
 Vue.use(Vuex);
 
@@ -47,9 +46,14 @@ export const store = new Vuex.Store<State>({
       let room = state.rooms.find(room => room._id == new ObjectId(payload.roomId));
       if (room) room.messages = payload.messages;
     },
-    pushMessage: (state, payload) => {
-      state.messages.push(payload as never);
-    }
+    pushMessage: (state, payload: Message) => {
+      let roomIndex = state.rooms.findIndex(room => room._id.equals(payload.room));
+      if (roomIndex != -1 && state.rooms[roomIndex].messages) {
+        // why does typescript complain that this can be undefined
+        state.rooms[roomIndex].messages.push(payload);
+        Vue.set(state.rooms, roomIndex, state.rooms[roomIndex]);
+      }
+    },
   },
   actions: {
     setCurrentRoom: async (context, payload: ObjectId | string) => {
@@ -70,23 +74,15 @@ export const store = new Vuex.Store<State>({
     },
     fetchUsers: async context => {
       try {
-        let users = (await services.userService.find({})).data;
+        let users = await services.Users.findUsers();
         context.commit("fetchUsers", users);
       } catch (e) {
         console.log("fetchUsers exception: ", e);
       }
     },
-    fetchMessages: async context => {
-      try {
-        let users = (await services.messageService.find({})).data;
-        context.commit("fetchMessages", users);
-      } catch (e) {
-        console.log("fetchMessages exception: ", e);
-      }
-    },
     fetchRoomMessages: async (context, payload: ObjectId | string ) => {
       try {
-        let messages = await services.Rooms.findMessages(payload);
+        let messages = await services.Messages.findMessages({room: new ObjectId(payload)});
         context.commit("fetchRoomMessages", { roomId: payload, messages: messages })
       } catch (e) {
         console.log("fetchRoomMessages exception: ", e);
@@ -97,4 +93,3 @@ export const store = new Vuex.Store<State>({
     }
   }
 });
-/* eslint-enable no-unused-vars */
