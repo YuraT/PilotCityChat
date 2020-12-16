@@ -170,36 +170,41 @@ const Chat = Vue.extend({
       // Im not sure why, but watchCollection breaks after a minute or two
       // this a temporary solution to restart it when it breaks with a try catch
       // TODO: research how to fix this properly
-      try {
-        await services.Messages.watchMessages(change => {
-          const { operationType } = change;
-          switch (operationType) {
-            case "insert": {
-              this.$store.dispatch("pushMessage", change.fullDocument);
-              // TODO: also add notifications here later
+      let error = false;
+      while (!error) {
+        try {
+          await services.Messages.watchMessages(change => {
+            const { operationType } = change;
+            switch (operationType) {
+              case "insert": {
+                this.$store.dispatch("pushMessage", change.fullDocument);
+                // TODO: also add notifications here later
+              }
             }
+          });
+        } catch (e) {
+          if (e.message.includes("execution time limit exceeded")) {
+            console.log("time limit error: ", e);
+            // restart the watcher if this error happens by not setting error
           }
-        });
-      } catch (e) {
-        if (e.message.includes("execution time limit exceeded")) {
-          console.log("time limit error: ", e);
-          // restart the watcher if this error happens
-          // bloody recursion, this is terrible
-          this.watchMessages();
+          else { 
+            console.log("message watching error: ", e);
+            error = true;
+          }
         }
-        else console.log("message watching error: ", e);
       }
     },
   },
   async created() {
     // this.windowHeight = document.getElementById("chatWindow").clientHeight;
+    if (!this.$store.state.currentRoom) {
+      await this.$store.dispatch("fetchRooms");
+      if (this.$store.state.rooms[0]) {
+        this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]._id);
+      }
 
-    await this.$store.dispatch("fetchRooms");
-    if (this.$store.state.rooms[0]) {
-      this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]._id);
+      this.watchMessages();
     }
-
-    this.watchMessages();
   }
 });
 export default Chat;
