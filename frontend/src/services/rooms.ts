@@ -36,7 +36,7 @@ export async function findRooms(): Promise<Array<Room> | undefined> {
   }
 }
 
-export async function watchRooms(callback: (change: any) => void) {
+export async function watchRooms(callback: (change: object) => void) {
   const mongo = app.currentUser?.mongoClient("mongodb-atlas");
   const mongoCollection = mongo?.db("chatrooms").collection("rooms");
   if (mongoCollection) {
