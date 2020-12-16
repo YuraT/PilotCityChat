@@ -252,7 +252,7 @@ export default {
   methods: {
     async signup() {
       try { 
-        await services.Users.registerUserEmailPassword(this.email, this.password, {
+        await services.Auth.registerUserEmailPassword(this.email, this.password, {
           username: this.username,
           firstname: this.firstname,
           lastname: this.lastname,
@@ -265,7 +265,7 @@ export default {
     },
     async signin() {
       try {
-        await services.Users.loginUserEmailPassword(this.email, this.password);
+        await services.Auth.loginUserEmailPassword(this.email, this.password);
 
         this.$router.push("/chat");
       } catch (e) {

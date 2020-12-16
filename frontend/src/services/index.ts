@@ -20,6 +20,7 @@ export const messageService = client.service("messages");
 export const roomService = client.service("rooms");
 
 import * as Realm from "realm-web";
+import * as Auth from "./auth";
 import * as Users from "./users";
 import * as Rooms from "./rooms";
 import * as Messages from "./messages"
@@ -30,6 +31,7 @@ const app = new Realm.App({
 });
 
 export { app };
+export { Auth };
 export { Users };
 export { Rooms };
 export { Messages };

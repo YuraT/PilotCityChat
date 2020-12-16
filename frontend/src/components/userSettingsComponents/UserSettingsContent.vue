@@ -114,7 +114,7 @@ export default {
     }
   },
   async logOut() {
-    await services.Users.logOut();
+    await services.Auth.logOut();
     this.$router.push("/auth");
   },
 
