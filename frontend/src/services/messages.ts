@@ -26,7 +26,7 @@ export async function sendMessage(roomId: ObjectId | string, text: string) {
   }
 }
 
-export async function watchMessages(callback: (change: object) => void) {
+export async function watchMessages(callback: (change: any) => void) {
   const mongo = services.app.currentUser?.mongoClient("mongodb-atlas");
   const mongoCollection = mongo?.db("chatrooms").collection("messages");
   if (mongoCollection) {

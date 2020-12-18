@@ -97,16 +97,16 @@ export default {
 */
     },
     updateUser() {
-      services.userService.update(
-        this.user._id,
-        {
-          $set: {
-            username: this.user.username,
-            email: this.user.email
-          }
-        },
-        {}
-      );
+      // services.userService.update(
+      //   this.user._id,
+      //   {
+      //     $set: {
+      //       username: this.user.username,
+      //       email: this.user.email
+      //     }
+      //   },
+      //   {}
+      // );
     },
     emitData(data) {
       console.log("clicked me");

@@ -18,7 +18,7 @@ export const store = new Vuex.Store<State>({
     currentRoom: undefined,
     rooms: [],
     users: [],
-    messages: []
+    messages: [],
   },
   getters: {},
   mutations: {
@@ -26,44 +26,43 @@ export const store = new Vuex.Store<State>({
       state.currentRoom = payload;
     },
     updateRoom: (state, payload: Room) => {
-      let roomIndex = state.rooms.findIndex(room => room._id.equals(payload._id));
+      const roomIndex = state.rooms.findIndex(room => room._id.equals(payload._id));
       if (roomIndex != -1) {
         Vue.set(state.rooms, roomIndex, payload);
         if (state.currentRoom?._id.equals(payload._id)) state.currentRoom = payload;
       }
-      else {state.rooms.push(payload)};
+      else state.rooms.push(payload);
     },
     fetchRooms: (state, payload: Array<Room>) => {
       state.rooms = payload;
     },
-    fetchUsers: (state, payload) => {
+    fetchUsers: (state, payload: Array<UserData>) => {
       state.users = payload;
     },
     fetchMessages: (state, payload) => {
       state.messages = payload;
     },
     fetchRoomMessages: (state, payload: { roomId: ObjectId | string, messages: Array<Message> }) => {
-      let room = state.rooms.find(room => room._id == new ObjectId(payload.roomId));
+      const room = state.rooms.find(room => room._id.equals(new ObjectId(payload.roomId)));
       if (room) room.messages = payload.messages;
     },
     pushMessage: (state, payload: Message) => {
-      let roomIndex = state.rooms.findIndex(room => room._id.equals(payload.room));
+      const roomIndex = state.rooms.findIndex(room => room._id.equals(payload.room));
       if (roomIndex != -1 && state.rooms[roomIndex].messages) {
-        // why does typescript complain that this can be undefined
-        state.rooms[roomIndex].messages.push(payload);
+        state.rooms[roomIndex].messages!.push(payload);
         Vue.set(state.rooms, roomIndex, state.rooms[roomIndex]);
       }
     },
   },
   actions: {
     setCurrentRoom: async (context, payload: ObjectId | string) => {
-      let room = context.state.rooms.find(room => room._id == new ObjectId(payload)) || undefined;
+      const room = context.state.rooms.find(room => room._id.equals(new ObjectId(payload))) || undefined;
       if (room?.messages == undefined) await context.dispatch("fetchRoomMessages", payload);
       context.commit("setCurrentRoom", room);
     },
     fetchRooms: async context => {
       try {
-        let rooms: Array<Room> | undefined = await services.Rooms.findRooms();
+        const rooms: Array<Room> | undefined = await services.Rooms.findRooms();
         context.commit("fetchRooms", rooms);
         services.Rooms.watchRooms(change => {
           store.commit("updateRoom", change.fullDocument as Room);
@@ -74,7 +73,7 @@ export const store = new Vuex.Store<State>({
     },
     fetchUsers: async context => {
       try {
-        let users = await services.Users.findUsers();
+        const users = await services.Users.findUsers();
         context.commit("fetchUsers", users);
       } catch (e) {
         console.log("fetchUsers exception: ", e);
@@ -82,7 +81,7 @@ export const store = new Vuex.Store<State>({
     },
     fetchRoomMessages: async (context, payload: ObjectId | string ) => {
       try {
-        let messages = await services.Messages.findMessages({room: new ObjectId(payload)});
+        const messages = await services.Messages.findMessages({room: new ObjectId(payload)});
         context.commit("fetchRoomMessages", { roomId: payload, messages: messages })
       } catch (e) {
         console.log("fetchRoomMessages exception: ", e);
@@ -90,6 +89,6 @@ export const store = new Vuex.Store<State>({
     },
     pushMessage: (context, payload) => {
       context.commit("pushMessage", payload);
-    }
-  }
+    },
+  },
 });

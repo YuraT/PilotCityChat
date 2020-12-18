@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import * as services from "./services/index.ts";
+// import * as services from "@/services";
 export default {
   name: "App",
 
@@ -25,10 +25,10 @@ export default {
   //   elHtml.style.overflowY = null;
   // }
   created() {
-    services.messageService.on("created", message => {
-      console.log("Created a message", message);
-      this.$store.dispatch("pushMessage", message);
-    });
+    // services.messageService.on("created", message => {
+    //   console.log("Created a message", message);
+    //   this.$store.dispatch("pushMessage", message);
+    // });
   }
 };
 </script>

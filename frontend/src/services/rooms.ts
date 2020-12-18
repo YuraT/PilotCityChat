@@ -10,7 +10,7 @@ export async function createRoom(roomName: String) {
       owner: app.currentUser?.id,
       members: [app.currentUser?.id],
       name: roomName,
-      messages: []
+      messages: [],
     });
     console.log("createRoom: ", result);
     return result;
@@ -22,10 +22,10 @@ export async function createRoom(roomName: String) {
 export async function findRooms(): Promise<Array<Room> | undefined> {
   const mongo = app.currentUser?.mongoClient("mongodb-atlas");
   const mongoCollection = mongo?.db("chatrooms").collection("rooms");
-  let findOptions = {
+  const findOptions = {
     projection: {
-      messages: 0
-    }
+      messages: 0,
+    },
   };
   try {
     const result = await mongoCollection?.find({}, findOptions);
@@ -36,7 +36,7 @@ export async function findRooms(): Promise<Array<Room> | undefined> {
   }
 }
 
-export async function watchRooms(callback: (change: object) => void) {
+export async function watchRooms(callback: (change: any) => void) {
   const mongo = app.currentUser?.mongoClient("mongodb-atlas");
   const mongoCollection = mongo?.db("chatrooms").collection("rooms");
   if (mongoCollection) {

@@ -54,7 +54,7 @@
 import Popup from "@/components/meetingSettingsComponents/LeaveMeetingPopup";
 import PopupEditData from "@/components/generalSettingsComponents/PopupEditData";
 import MemberList from "@/components/meetingSettingsComponents/MemberList";
-import * as services from "../../services/index.ts";
+// import * as services from "@/services/index.ts";
 
 export default {
   name: "SettingsContent",
@@ -106,15 +106,15 @@ export default {
   },
   methods: {
     fetchUsers() {
-      services.userService
-        .find({})
-        .then(users => {
-          console.log("users", users);
-          this.members = users.data;
-        })
-        .catch(e => {
-          console.log("meetingSettingsService error: ", e);
-        });
+      // services.userService
+      //   .find({})
+      //   .then(users => {
+      //     console.log("users", users);
+      //     this.members = users.data;
+      //   })
+      //   .catch(e => {
+      //     console.log("meetingSettingsService error: ", e);
+      //   });
     },
     emitData(data) {
       console.log("clicked me");
