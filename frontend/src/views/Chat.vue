@@ -12,7 +12,7 @@
       <v-container class="secondary pl-3 pr-6 mb-n8" id="chatWindow" fluid>
         <Message
           v-for="(message, index) in currentMessages || []"
-          :key="index"
+          :key="message._id.toHexString()"
           :is-owned="message.user == currentUser._id"
           :content="message.text"
           :name="userOfId(message.user).username"
@@ -40,7 +40,7 @@
         id="textArea"
         outlined
         placeholder="Type a message..."
-        rows="auto"
+        rows="0"
         v-model="newMessage"
         @click:append-outer="sendMessage"
         @keydown.enter.exact.prevent="sendMessage"
