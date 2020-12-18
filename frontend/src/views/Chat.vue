@@ -201,11 +201,13 @@ const Chat = Vue.extend({
       await this.$store.dispatch("fetchUsers");
       if (this.$store.state.rooms[0]) {
         await this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]._id);
-        this.scrollToBottom();
       }
 
       this.watchMessages();
     }
+  },
+  mounted() {
+    this.scrollToBottom();
   }
 });
 export default Chat;
