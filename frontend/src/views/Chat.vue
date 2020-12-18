@@ -1,7 +1,7 @@
 <template>
-  <div class="chat" v-scroll:#chatWindow="scrollToBottom()">
+  <div class="chat">
     <Header :room="currentRoom || {}" />
-    <Sidebar v-model="currentRoom" :rooms="rooms" :currentUser="currentUser" />
+    <Sidebar v-model="currentRoom" :rooms="rooms" :currentUser="currentUser" @update-current-room="scrollToBottom" />
     <!-- @toggleDrawer="drawer != drawer" -->
 
     <!-- Chat window -->
@@ -200,7 +200,8 @@ const Chat = Vue.extend({
       await this.$store.dispatch("fetchRooms");
       await this.$store.dispatch("fetchUsers");
       if (this.$store.state.rooms[0]) {
-        this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]._id);
+        await this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]._id);
+        this.scrollToBottom();
       }
 
       this.watchMessages();
