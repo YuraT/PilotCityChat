@@ -164,7 +164,6 @@ export default {
     },
     async updateCurrentRoom(roomId) {
       await this.$store.dispatch("setCurrentRoom", roomId);
-      this.$emit("update-current-room", roomId);
     },
     getInitials(fullName) {
       let names = fullName.split(" ");

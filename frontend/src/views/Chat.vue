@@ -1,7 +1,7 @@
 <template>
-  <div class="chat">
+  <div class="chat" v-scroll:#chatWindow="$vuetify.goTo(9999, { duration: 0 })">
     <Header :room="currentRoom || {}" />
-    <Sidebar v-model="currentRoom" :rooms="rooms" :currentUser="currentUser" @update-current-room="scrollToBottom" />
+    <Sidebar v-model="currentRoom" :rooms="rooms" :currentUser="currentUser" />
     <!-- @toggleDrawer="drawer != drawer" -->
 
     <!-- Chat window -->
@@ -155,9 +155,6 @@ export default Vue.extend({
       // console.log("formattedTimes: ", this.formattedTimes);
       return formattedTime;
     },
-    scrollToBottom() {
-      this.$vuetify.goTo(9999, { duration: 0 });
-    },
     sameSenderAndTime(msg, prevMsg) {
       if (prevMsg) {
         let msgTime = moment(msg._id.getTimestamp()).calendar();
@@ -205,9 +202,6 @@ export default Vue.extend({
 
       this.watchMessages();
     }
-  },
-  mounted() {
-    this.scrollToBottom();
   },
 });
 </script>
