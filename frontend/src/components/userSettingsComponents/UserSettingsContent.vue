@@ -27,29 +27,29 @@
               <!-- if you want more values from 1 v model pass an array from child -->
               <EditUsername
                 @input="updateUser"
-                v-model="user.username"
+                v-model="username"
                 :title="`Username`"
               />
             </v-col>
           </v-row>
-          <p class="setting-information">{{ user.username }}</p>
+          <p class="setting-information">{{ username }}</p>
 
           <v-row>
             <p class="setting-subheader ml-3">Email</p>
             <v-col cols="14">
               <EditUsername
                 @input="updateUser"
-                v-model="user.email"
+                v-model="email"
                 :title="`Email`"
               />
             </v-col>
           </v-row>
-          <p class="setting-information">{{ user.email }}</p>
+          <p class="setting-information">{{ email }}</p>
 
           <div class="my-2">
             <p class="setting-subheader">Password</p>
             <!-- #todo -->
-            <ResetPasswordPopup :email="user.email" />
+            <ResetPasswordPopup :email="email" />
           </div>
 
           <div class="my-2">
@@ -78,16 +78,21 @@ import Popup from "@/components/generalSettingsComponents/ButtonPopup";
 import ButtonPopupConfirm from "@/components/buttonComponents/ButtonPopupConfirm";
 import PopupEditData from "@/components/generalSettingsComponents/PopupEditData";
 export default {
-  //{{ data.myPfp }}
   name: "SettingsContent",
   data() {
     return {
       user: {
         myPfp: "@/assets/pfp.png",
-        username: "FlexibleMonsterPoop",
-        email: "CodingInterns@pc.net"
       },
     };
+  },
+  computed: {
+    email() {
+      return services.app.currentUser?.profile?.email;
+    },
+    username() {
+      return services.app.currentUser?.customData?.username;
+    },
   },
   methods: {
     getImgUrl() {
@@ -97,31 +102,21 @@ export default {
 */
     },
     updateUser() {
-      // services.userService.update(
-      //   this.user._id,
-      //   {
-      //     $set: {
-      //       username: this.user.username,
-      //       email: this.user.email
-      //     }
-      //   },
-      //   {}
-      // );
+      services.Users.updateUserDocument(
+        {
+          username: this.username,
+          // email: this.email // does not work for now, going to have to do this through realm
+        }
+      );
     },
     emitData(data) {
       console.log("clicked me");
       this.$emit("input", data);
-    }
     },
     async logOut() {
       await services.Auth.logOut();
       this.$router.push("/");
     },
-
-  async created() {
-    await services.client.reAuthenticate();
-    this.user = (await services.client.get("authentication")).user;
-    console.log("user", this.user);
   },
 
   components: {
