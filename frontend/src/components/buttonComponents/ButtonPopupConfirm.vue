@@ -37,10 +37,10 @@ export default {
     icon: String,
     popupOptions: {
       type: Object,
-      validator: (options) => 
-        options.title instanceof String &&
-        options.buttonClass instanceof String &&
-        options.buttonText instanceof String
+      validator: (options) =>
+        options.title.constructor === String &&
+        options.buttonClass.constructor === String &&
+        options.buttonText.constructor === String
     },
   },
   data() {

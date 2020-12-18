@@ -112,11 +112,11 @@ export default {
       console.log("clicked me");
       this.$emit("input", data);
     }
-  },
-  async logOut() {
-    await services.Auth.logOut();
-    this.$router.push("/auth");
-  },
+    },
+    async logOut() {
+      await services.Auth.logOut();
+      this.$router.push("/");
+    },
 
   async created() {
     await services.client.reAuthenticate();
