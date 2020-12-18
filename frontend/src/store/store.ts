@@ -56,8 +56,8 @@ export const store = new Vuex.Store<State>({
   },
   actions: {
     setCurrentRoom: async (context, payload: ObjectId | string) => {
-      const room = context.state.rooms.find(room => room._id.equals(new ObjectId(payload))) || undefined;
-      if (room?.messages == undefined) await context.dispatch("fetchRoomMessages", payload);
+      const room = context.state.rooms.find(room => room._id.equals(new ObjectId(payload)));
+      if (!room?.messages) await context.dispatch("fetchRoomMessages", payload);
       context.commit("setCurrentRoom", room);
     },
     fetchRooms: async context => {
@@ -79,7 +79,7 @@ export const store = new Vuex.Store<State>({
         console.log("fetchUsers exception: ", e);
       }
     },
-    fetchRoomMessages: async (context, payload: ObjectId | string ) => {
+    fetchRoomMessages: async (context, payload: ObjectId | string) => {
       try {
         const messages = await services.Messages.findMessages({room: new ObjectId(payload)});
         context.commit("fetchRoomMessages", { roomId: payload, messages: messages })

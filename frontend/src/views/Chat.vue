@@ -101,7 +101,7 @@ import Message from "@/components/Message";
 import Sidebar from "@/components/Sidebar";
 import Header from "../components/Header";
 
-const Chat = Vue.extend({
+export default Vue.extend({
   name: "Chat",
   components: {
     Message,
@@ -114,8 +114,8 @@ const Chat = Vue.extend({
       // formattedTimes: [],
       newMessage: null,
       colors: {
-        green: "#6eba7f"
-      }
+        green: "#6eba7f",
+      },
       // Possible field validation for empty text area
       // windowHeight: null,
       // rules: {
@@ -138,7 +138,7 @@ const Chat = Vue.extend({
     },
     rooms() {
       return this.$store.state.rooms;
-    }
+    },
   },
 
   methods: {
@@ -147,7 +147,7 @@ const Chat = Vue.extend({
       this.newMessage = "";
     },
     userOfId(id) {
-      return this.users.find(user => user.userId == id);
+      return this.users.find((user) => user.userId == id);
     },
     formatTime(time) {
       let formattedTime = moment(time).calendar();
@@ -172,7 +172,7 @@ const Chat = Vue.extend({
       let error = false;
       while (!error) {
         try {
-          await services.Messages.watchMessages(change => {
+          await services.Messages.watchMessages((change) => {
             const { operationType } = change;
             switch (operationType) {
               case "insert": {
@@ -185,8 +185,7 @@ const Chat = Vue.extend({
           if (e.message.includes("execution time limit exceeded")) {
             console.log("time limit error: ", e);
             // restart the watcher if this error happens by not setting error
-          }
-          else { 
+          } else {
             console.log("message watching error: ", e);
             error = true;
           }
@@ -200,6 +199,7 @@ const Chat = Vue.extend({
       await this.$store.dispatch("fetchRooms");
       await this.$store.dispatch("fetchUsers");
       if (this.$store.state.rooms[0]) {
+        // if it exists, set currentRoom to the first room on load
         await this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]._id);
       }
 
@@ -208,9 +208,8 @@ const Chat = Vue.extend({
   },
   mounted() {
     this.scrollToBottom();
-  }
+  },
 });
-export default Chat;
 </script>
 
 <style>

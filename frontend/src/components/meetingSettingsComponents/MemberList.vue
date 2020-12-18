@@ -122,14 +122,14 @@ export default {
   props: {
     value: String,
     memberData: Array,
-    title: String
+    title: String,
   }, // ready to receive "male prop"
   data() {
     return {
       searchedMember: this.value,
       isClicked: false,
       isClicedSave: false,
-      dataChange: this.value
+      dataChange: this.value,
       // delimitedSearchedMember: "",
     };
   },
@@ -150,9 +150,9 @@ export default {
     },
     updateSearchMember(payload) {
       this.searchedMember = payload;
-    }
+    },
   },
-  components: {}
+  components: {},
 };
 </script>
 

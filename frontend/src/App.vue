@@ -29,7 +29,7 @@ export default {
     //   console.log("Created a message", message);
     //   this.$store.dispatch("pushMessage", message);
     // });
-  }
+  },
 };
 </script>
 

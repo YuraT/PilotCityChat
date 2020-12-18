@@ -1,9 +1,9 @@
-import bson from "bson";
+import { ObjectId } from "bson";
 import { Message } from "./message";
 
 
 export interface Room {
-    _id: bson.ObjectId,
+    _id: ObjectId,
     owner: string,
     members: Array<String>,
     name: string,

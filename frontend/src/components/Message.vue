@@ -23,7 +23,7 @@
       <v-row :justify="owned">
         <v-card outlined :class="rounding">
           <v-card dark flat class="secondary">
-            <v-card-text class="py-2 px-3" style="white-space: pre-wrap;">{{
+            <v-card-text class="py-2 px-3" style="white-space: pre-wrap">{{
               content
             }}</v-card-text>
           </v-card>
@@ -41,27 +41,27 @@ export default {
     content: String,
     name: String,
     timestamp: String,
-    groupWithPrevMsg: Boolean
+    groupWithPrevMsg: Boolean,
   },
   data: () => {
     return {
       picture: "mdi-account",
       colors: {
-        green: "#6EBA7F"
-      }
+        green: "#6EBA7F",
+      },
     };
   },
   computed: {
     initials() {
       let names = this.name.split(" ");
       let initials = "";
-      names.forEach(name => (initials += name.substring(0, 1)));
+      names.forEach((name) => (initials += name.substring(0, 1)));
       return initials;
     },
     rounding() {
       return this.isOwned
-      ? "rounded-tr-xl rounded-l-xl"
-      : "rounded-bl-xl rounded-r-xl";
+        ? "rounded-tr-xl rounded-l-xl"
+        : "rounded-bl-xl rounded-r-xl";
     },
     owned() {
       return this.isOwned ? "end" : "start";
@@ -72,7 +72,6 @@ export default {
     styleSideSpacing() {
       return this.groupWithPrevMsg ? "ml-14" : "ml-2";
     },
-    
   },
 };
 </script>

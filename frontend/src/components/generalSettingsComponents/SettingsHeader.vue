@@ -66,13 +66,13 @@ export default {
   name: "Header",
   data: () => {
     return {
-      title: "Settings"
+      title: "Settings",
     };
   },
   methods: {
     toggleDrawer() {
       this.$emit("toggleDrawer");
-    }
-  }
+    },
+  },
 };
 </script>

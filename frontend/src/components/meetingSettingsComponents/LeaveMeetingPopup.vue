@@ -34,11 +34,11 @@ export default {
   name: "Popup",
   props: {
     input: String,
-    email: String
+    email: String,
   },
   data() {
     return {
-      isClicked: false
+      isClicked: false,
     };
   },
   methods: {
@@ -47,11 +47,11 @@ export default {
     },
     leaveChat() {
       console.log("leave chat clicked");
-    }
+    },
   },
 
   components: {
     // SettingsContent
-  }
+  },
 };
 </script>

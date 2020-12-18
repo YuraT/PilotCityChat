@@ -18,11 +18,11 @@ export default {
   name: "MeetingSettings",
   components: {
     Header,
-    SettingsContent
+    SettingsContent,
   },
   data() {
     return {};
-  }
+  },
 };
 </script>
 

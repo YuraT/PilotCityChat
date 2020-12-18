@@ -2,9 +2,7 @@
   <div class="home">
     <section class="welcome">
       <div class="auth">
-        <h1>
-          PilotCity Chat Room
-        </h1>
+        <h1>PilotCity Chat Room</h1>
         <div class="button-block">
           <button @click="AuthPage">Start Here</button>
         </div>
@@ -13,10 +11,10 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 
-const Home = Vue.extend({
+export default Vue.extend({
   name: "Home",
   methods: {
     AuthPage() {
@@ -24,7 +22,6 @@ const Home = Vue.extend({
     },
   },
 });
-export default Home;
 </script>
 
 <style lang="scss" scoped>

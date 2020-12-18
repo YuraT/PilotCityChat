@@ -119,7 +119,7 @@ export default {
   data: () => {
     return {
       colors: {
-        green: "#6EBA7F"
+        green: "#6EBA7F",
       },
       stakeholders: {
         model: false,
@@ -128,9 +128,9 @@ export default {
           { icon: "mdi-account", name: "Prajet" },
           { icon: "mdi-account", name: "Dayrick" },
           { icon: "mdi-account", name: "Keknee" },
-          { icon: "mdi-account", name: "Pokemonaca" }
-        ]
-      }
+          { icon: "mdi-account", name: "Pokemonaca" },
+        ],
+      },
       //rooms: []
       //recentChats: [],
       //olderChats: [],
@@ -138,11 +138,11 @@ export default {
   },
   computed: {
     rooms() {
-      return this.$store.state.rooms.map(room => {
+      return this.$store.state.rooms.map((room) => {
         return {
           _id: room._id,
           icon: room.members.length > 2 ? "mdi-account-group" : "mdi-account",
-          name: room.name
+          name: room.name,
         };
       });
     },
@@ -169,9 +169,9 @@ export default {
     getInitials(fullName) {
       let names = fullName.split(" ");
       let initials = "";
-      names.forEach(name => (initials += name.substring(0, 1)));
+      names.forEach((name) => (initials += name.substring(0, 1)));
       return initials;
-    }
+    },
   },
 };
 </script>

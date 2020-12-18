@@ -23,21 +23,21 @@ export default {
   name: "Popup",
   props: {
     input: String,
-    email: String
+    email: String,
   },
   data() {
     return {
-      isClicked: false
+      isClicked: false,
     };
   },
   methods: {
     tellClicked() {
       console.log("clicked");
-    }
+    },
   },
 
   components: {
     // SettingsContent
-  }
+  },
 };
 </script>

@@ -69,39 +69,39 @@ export default {
             lastName: "Joe",
             id: "123",
             pfp: "@/assets/pfp.png",
-            isMember: true
+            isMember: true,
           },
           {
             name: "Joe",
             lastName: "Mama",
             id: "345",
             pfp: "@/assets/pfp.png",
-            isMember: false
+            isMember: false,
           },
           {
             name: "Joe",
             lastName: "Papa",
             id: "567",
             pfp: "@/assets/pfp.png",
-            isMember: true
+            isMember: true,
           },
           {
             name: "Joe",
             lastName: "Guy",
             id: "432",
             pfp: "@/assets/pfp.png",
-            isMember: true
+            isMember: true,
           },
           {
             name: "Joe",
             lastName: "Grandma",
             id: "332",
             pfp: "@/assets/pfp.png",
-            isMember: false
-          }
-        ]
+            isMember: false,
+          },
+        ],
         // currentUser: this.chat.members[0],
-      }
+      },
     };
   },
   methods: {
@@ -119,14 +119,14 @@ export default {
     emitData(data) {
       console.log("clicked me");
       this.$emit("input", data);
-    }
+    },
   },
 
   components: {
     ResetPasswordPopup: Popup,
     EditData: PopupEditData,
-    MemberList
-  }
+    MemberList,
+  },
 };
 </script>
 

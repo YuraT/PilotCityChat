@@ -50,14 +50,13 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 
-
-const Header = Vue.extend({
+export default Vue.extend({
   name: "Header",
   props: {
-    room: Object
+    room: Object,
   },
   data: () => {
     return {
@@ -69,9 +68,7 @@ const Header = Vue.extend({
   methods: {
     toggleDrawer() {
       this.$emit("toggleDrawer");
-    }
-  }
+    },
+  },
 });
-
-export default Header;
 </script>

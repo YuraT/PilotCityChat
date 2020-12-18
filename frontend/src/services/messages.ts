@@ -19,7 +19,7 @@ export async function findMessages(filter: object): Promise<Array<Message> | und
 export async function sendMessage(roomId: ObjectId | string, text: string) {
   const user = services.app.currentUser;
   try {
-    const result = await user?.callFunction("sendMessage", {roomId, text});
+    const result = await user?.callFunction("sendMessage", { roomId, text });
     console.log("sendMessage: ", result);
   } catch (e) {
     console.log("sendMessage error: ", e);

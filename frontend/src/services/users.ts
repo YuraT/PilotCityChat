@@ -6,7 +6,10 @@ export async function updateUserDocument(userData: UserData) {
   const mongo = app.currentUser?.mongoClient("mongodb-atlas");
   const mongoCollection = mongo?.db("chatrooms").collection("users");
   try {
-    const result = await mongoCollection?.updateOne({userId: app.currentUser?.id}, { $set: userData });
+    const result = await mongoCollection?.updateOne(
+      { userId: app.currentUser?.id },
+      { $set: userData }
+    );
     console.log("updateUserDocument: ", result);
     return result;
   } catch (e) {

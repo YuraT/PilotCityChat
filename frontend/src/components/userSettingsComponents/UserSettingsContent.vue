@@ -20,7 +20,6 @@
     <v-row align="center" justify="center">
       <v-container class="white-border">
         <v-card class="pa-6 accent" width="100%" outlined>
-
           <v-row>
             <p class="setting-subheader ml-3">Username</p>
             <v-col cols="14">
@@ -54,14 +53,14 @@
 
           <div class="my-2">
             <p class="setting-subheader">Log Out</p>
-            <ButtonPopupConfirm 
+            <ButtonPopupConfirm
               buttonClass="font-family-Raleway red accent-2 white--text"
               buttonText="Log Out"
               icon="mdi-exit-to-app"
               :popupOptions="{
-                  title: 'Are you sure you want to log out?',
-                  buttonClass: 'font-family-Raleway red accent-2 white--text',
-                  buttonText: 'Log Out'
+                title: 'Are you sure you want to log out?',
+                buttonClass: 'font-family-Raleway red accent-2 white--text',
+                buttonText: 'Log Out',
               }"
               @click="logOut"
             />
@@ -102,12 +101,10 @@ export default {
 */
     },
     updateUser() {
-      services.Users.updateUserDocument(
-        {
-          username: this.username,
-          // email: this.email // does not work for now, going to have to do this through realm
-        }
-      );
+      services.Users.updateUserDocument({
+        username: this.username,
+        // email: this.email // does not work for now, going to have to do this through realm
+      });
     },
     emitData(data) {
       console.log("clicked me");
@@ -123,7 +120,7 @@ export default {
     ResetPasswordPopup: Popup,
     EditUsername: PopupEditData,
     ButtonPopupConfirm: ButtonPopupConfirm,
-  }
+  },
 };
 </script>
 

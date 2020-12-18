@@ -18,11 +18,11 @@ export default {
   name: "Settings",
   components: {
     Header,
-    SettingsContent
+    SettingsContent,
   },
   data() {
     return {};
-  }
+  },
 };
 </script>
 

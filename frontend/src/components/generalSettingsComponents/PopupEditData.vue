@@ -39,21 +39,21 @@ export default {
   name: "PopupEditData",
   props: {
     value: String,
-    title: String
+    title: String,
   }, // ready to receive "male prop"
   data() {
     return {
       isClicked: false,
-      dataChange: this.value
+      dataChange: this.value,
     };
   },
   methods: {
     emitData(dataChange) {
       this.$emit("input", dataChange);
-    }
+    },
   },
   components: {
     // SettingsContent
-  }
+  },
 };
 </script>

@@ -1,8 +1,13 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import Auth from "../views/AuthPage.vue";
+
 import { app } from "@/services";
+
+import Home from "@/views/Home.vue";
+import Auth from "@/views/AuthPage.vue";
+import Chat from "@/views/Chat.vue";
+import UserSettings from "@/views/UserSettings.vue";
+import MeetingSettings from "@/views/MeetingSettings.vue";
 
 Vue.use(VueRouter);
 
@@ -10,7 +15,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home
+    component: Home,
   },
   {
     path: "/chat",
@@ -18,7 +23,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ "../views/Chat.vue"),
+    component: Chat,
     meta: {
       requiresAuth: true,
     },
@@ -26,8 +31,7 @@ const routes = [
   {
     path: "/settings/user",
     name: "Settings",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/UserSettings.vue"),
+    component: UserSettings,
     meta: {
       requiresAuth: true,
     },
@@ -35,8 +39,7 @@ const routes = [
   {
     path: "/settings/meeting",
     name: "MeetingSettings",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/MeetingSettings.vue"),
+    component: MeetingSettings,
     meta: {
       requiresAuth: true,
     },
@@ -44,14 +47,14 @@ const routes = [
   {
     path: "/auth",
     name: "Auth",
-    component: Auth
-  }
+    component: Auth,
+  },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
 router.beforeEach((to, from, next) => {

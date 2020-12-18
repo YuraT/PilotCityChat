@@ -210,21 +210,21 @@ import * as services from "@/services/index.ts";
 export default {
   name: "Auth",
   compononets: {
-    Header
+    Header,
   },
   props: {
     source: {
       type: String,
-      default: "white"
+      default: "white",
     },
     bgColor: {
       type: String,
-      default: "--dark-gray: #404142"
+      default: "--dark-gray: #404142",
     },
     fgColor: {
       type: String,
-      default: "white"
-    }
+      default: "white",
+    },
   },
   async fetch({ store, error }, user) {
     try {
@@ -232,7 +232,7 @@ export default {
     } catch (e) {
       error({
         statusCode: 503,
-        message: "Unable to sign up user. Please try again later."
+        message: "Unable to sign up user. Please try again later.",
       });
     }
   },
@@ -247,20 +247,24 @@ export default {
     snackbar: false,
     confirmpassword: null,
     lastname: "",
-    firstname: ""
+    firstname: "",
   }),
   methods: {
     async signup() {
-      try { 
-        await services.Auth.registerUserEmailPassword(this.email, this.password, {
-          username: this.username,
-          firstname: this.firstname,
-          lastname: this.lastname,
-        });
+      try {
+        await services.Auth.registerUserEmailPassword(
+          this.email,
+          this.password,
+          {
+            username: this.username,
+            firstname: this.firstname,
+            lastname: this.lastname,
+          }
+        );
 
         this.$router.push("/chat");
       } catch (e) {
-        console.log("signup error: ", e)
+        console.log("signup error: ", e);
       }
     },
     async signin() {
@@ -272,7 +276,7 @@ export default {
         console.log("signin error: ", e);
       }
     },
-  }
+  },
 };
 </script>
 

@@ -1,4 +1,4 @@
-import {ObjectId, Timestamp} from "bson";
+import { ObjectId } from "bson";
 
 
 export interface Message {
