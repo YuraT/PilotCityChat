@@ -162,32 +162,45 @@ export default Vue.extend({
         return msg.user == prevMsg.user && msgTime == prevMsgTime;
       } else return false;
     },
-    async watchMessages() {
-      // Im not sure why, but watchCollection breaks after a minute or two
-      // this a temporary solution to restart it when it breaks with a try catch
-      // TODO: research how to fix this properly
-      let error = false;
-      while (!error) {
-        try {
-          await services.Messages.watchMessages((change) => {
-            const { operationType } = change;
-            switch (operationType) {
-              case "insert": {
-                this.$store.dispatch("pushMessage", change.fullDocument);
-                // TODO: also add notifications here later
+    handleRoomUpdate(change) {
+      const { documentKey, updateDescription } = change;
+      const { updatedFields } = updateDescription;
+      const room = this.$store.state.rooms.find(room => room._id.equals(documentKey._id));
+
+      if (room) {
+        for (const field in updatedFields) {
+          // fields[0] instead of just field because field === something like "messages.6" for an array
+          let fields = field.split(".");
+
+          switch (fields[0]) {
+            case "messages": {
+              let index = fields[1];
+              // if message at updated index doesnt exist, push it
+              if (!room.messages[index]) {
+                this.$store.dispatch("pushMessage", {
+                  roomId: documentKey._id,
+                  message: updatedFields[field],
+                })
+              } else {
+                // might use this for editing messages
               }
             }
-          });
-        } catch (e) {
-          if (e.message.includes("execution time limit exceeded")) {
-            console.log("time limit error: ", e);
-            // restart the watcher if this error happens by not setting error
-          } else {
-            console.log("message watching error: ", e);
-            error = true;
           }
         }
+      } else { // if room doesnt exist in store (hasnt been loaded), just display a notificaion
+      // TODO: add notifications here later
       }
+    },
+    async watchRooms() {
+      console.log("watching rooms");
+      await services.Rooms.watchRooms((change) => {
+        const { operationType } = change;
+        switch (operationType) {
+          case "update": {
+            this.handleRoomUpdate(change);
+          } 
+        }
+      });
     },
   },
   async created() {
@@ -200,7 +213,7 @@ export default Vue.extend({
         await this.$store.dispatch("setCurrentRoom", this.$store.state.rooms[0]._id);
       }
 
-      this.watchMessages();
+      this.watchRooms();
     }
   },
 });

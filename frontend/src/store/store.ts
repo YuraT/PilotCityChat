@@ -46,10 +46,10 @@ export const store = new Vuex.Store<State>({
       const room = state.rooms.find(room => room._id.equals(new ObjectId(payload.roomId)));
       if (room) room.messages = payload.messages;
     },
-    pushMessage: (state, payload: Message) => {
-      const roomIndex = state.rooms.findIndex(room => room._id.equals(payload.room));
+    pushMessage: (state, payload: { roomId: ObjectId | string, message: Message }) => {
+      const roomIndex = state.rooms.findIndex(room => room._id.equals(payload.roomId));
       if (roomIndex != -1 && state.rooms[roomIndex].messages) {
-        state.rooms[roomIndex].messages!.push(payload);
+        state.rooms[roomIndex].messages!.push(payload.message);
         Vue.set(state.rooms, roomIndex, state.rooms[roomIndex]);
       }
     },
@@ -64,9 +64,6 @@ export const store = new Vuex.Store<State>({
       try {
         const rooms: Array<Room> | undefined = await services.Rooms.findRooms();
         context.commit("fetchRooms", rooms);
-        services.Rooms.watchRooms(change => {
-          store.commit("updateRoom", change.fullDocument as Room);
-        });
       } catch (e) {
         console.log("fetchRooms exception: ", e);
       }
@@ -81,7 +78,7 @@ export const store = new Vuex.Store<State>({
     },
     fetchRoomMessages: async (context, payload: ObjectId | string) => {
       try {
-        const messages = await services.Messages.findMessages({room: new ObjectId(payload)});
+        const messages = await services.Messages.findMessages({_id: new ObjectId(payload)});
         context.commit("fetchRoomMessages", { roomId: payload, messages: messages })
       } catch (e) {
         console.log("fetchRoomMessages exception: ", e);

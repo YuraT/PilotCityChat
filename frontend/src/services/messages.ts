@@ -6,11 +6,16 @@ import * as services from "@/services";
 
 export async function findMessages(filter: object): Promise<Array<Message> | undefined> {
   const mongo = services.app.currentUser?.mongoClient("mongodb-atlas");
-  const mongoCollection = mongo?.db("chatrooms").collection("messages");
+  const mongoCollection = mongo?.db("chatrooms").collection("rooms");
+  const findOptions = {
+    projection: {
+      messages: 1,
+    }
+  }
   try {
-    const result = await mongoCollection?.find(filter);
+    const result = await mongoCollection?.findOne(filter, findOptions);
     console.log("findMessages: ", result);
-    return result as Array<Message>;
+    return result.messages as Array<Message>;
   } catch (e) {
     console.log("findMessages error:", e);
   }
@@ -23,17 +28,5 @@ export async function sendMessage(roomId: ObjectId | string, text: string) {
     console.log("sendMessage: ", result);
   } catch (e) {
     console.log("sendMessage error: ", e);
-  }
-}
-
-export async function watchMessages(callback: (change: any) => void) {
-  const mongo = services.app.currentUser?.mongoClient("mongodb-atlas");
-  const mongoCollection = mongo?.db("chatrooms").collection("messages");
-  if (mongoCollection) {
-    console.log("watching messages");
-    for await (const change of mongoCollection?.watch()) {
-      console.log("message change: ", change);
-      callback(change);
-    }
   }
 }
