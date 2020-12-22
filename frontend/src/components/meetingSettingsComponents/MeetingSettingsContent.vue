@@ -16,7 +16,7 @@
         justify-center
         class="text-decoration-underline big-letters white--text"
       >
-        Meeting Settings
+        Room Settings
       </h1>
     </v-row>
     <!--General Settings Information-->
@@ -24,26 +24,36 @@
       <v-container class="white-border">
         <v-card class="pa-6 accent" width="100%" outlined>
           <v-row>
-            <p class="setting-subheader ml-3">Chat Name</p>
+            <p class="setting-subheader ml-3">Room Name</p>
             <v-col cols="14">
               <!-- if you want more values from 1 v model pass an array from child -->
-              <EditData v-model="chat.name" :title="`Chat Name`" />
+              <EditData v-model="room.name" :title="`Room Name`" />
             </v-col>
           </v-row>
-          <p class="setting-information">{{ chat.name }}</p>
+          <p class="setting-information">{{ room.name }}</p>
           <v-row>
             <p class="setting-subheader ml-3">Members</p>
             <v-col cols="14">
               <MemberList
-                @updatedMemberData="chat.members = $emit"
-                :memberData="chat.members"
+                @updatedMemberData="room.members = $emit"
+                :memberData="room.members"
                 :title="'Members'"
               />
             </v-col>
           </v-row>
-          <p class="setting-subheader">Password</p>
+          <p class="setting-subheader">Leave</p>
           <!-- #todo -->
-          <ResetPasswordPopup :email="chat.name" />
+          <ButtonPopupConfirm
+              buttonClass="font-family-Raleway red accent-2 white--text"
+              buttonText="Leave Room"
+              icon="mdi-exit-to-app"
+              :popupOptions="{
+                title: 'Are you sure you want to leave this room?',
+                buttonClass: 'font-family-Raleway red accent-2 white--text',
+                buttonText: 'Leave Room',
+              }"
+              @confirm="leaveRoom"
+            />
         </v-card>
       </v-container>
     </v-row>
@@ -51,17 +61,16 @@
 </template>
 
 <script>
-import Popup from "@/components/meetingSettingsComponents/LeaveMeetingPopup";
 import PopupEditData from "@/components/generalSettingsComponents/PopupEditData";
+import ButtonPopupConfirm from "@/components/buttonComponents/ButtonPopupConfirm";
 import MemberList from "@/components/meetingSettingsComponents/MemberList";
-// import * as services from "@/services/index.ts";
+// import * as services from "@/services";
 
 export default {
   name: "SettingsContent",
   data() {
     return {
-      chat: {
-        titleVariable: "members222",
+      room: {
         name: "Coding Interns",
         members: [
           {
@@ -100,31 +109,20 @@ export default {
             isMember: false,
           },
         ],
-        // currentUser: this.chat.members[0],
+        // currentUser: this.room.members[0],
       },
     };
   },
   methods: {
-    fetchUsers() {
-      // services.userService
-      //   .find({})
-      //   .then(users => {
-      //     console.log("users", users);
-      //     this.members = users.data;
-      //   })
-      //   .catch(e => {
-      //     console.log("meetingSettingsService error: ", e);
-      //   });
-    },
-    emitData(data) {
-      console.log("clicked me");
-      this.$emit("input", data);
+    async leaveRoom() {
+      // TODO
+      console.log("leaving room");
     },
   },
 
   components: {
-    ResetPasswordPopup: Popup,
     EditData: PopupEditData,
+    ButtonPopupConfirm,
     MemberList,
   },
 };

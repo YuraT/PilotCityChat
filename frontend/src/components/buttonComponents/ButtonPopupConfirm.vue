@@ -11,7 +11,7 @@
 
         <v-card-text>
           <!-- todo leave chat -->
-          <v-btn @click="$emit('click')" :class="popupOptions.buttonClass">
+          <v-btn @click="$emit('confirm')" :class="popupOptions.buttonClass">
             {{ popupOptions.buttonText }}
           </v-btn>
         </v-card-text>

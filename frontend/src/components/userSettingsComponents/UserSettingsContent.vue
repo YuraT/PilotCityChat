@@ -62,7 +62,7 @@
                 buttonClass: 'font-family-Raleway red accent-2 white--text',
                 buttonText: 'Log Out',
               }"
-              @click="logOut"
+              @confirm="logOut"
             />
           </div>
         </v-card>
