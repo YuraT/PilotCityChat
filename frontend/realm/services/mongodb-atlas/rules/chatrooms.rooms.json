@@ -1,0 +1,85 @@
+{
+    "collection": "rooms",
+    "database": "chatrooms",
+    "relationships": {
+        "members": {
+            "ref": "#/relationship/mongodb-atlas/chatrooms/users",
+            "source_key": "members",
+            "foreign_key": "userId",
+            "is_list": true
+        }
+    },
+    "roles": [
+        {
+            "name": "owner",
+            "apply_when": {
+                "owner": "%%user.id"
+            },
+            "fields": {
+                "messages": {}
+            },
+            "read": true,
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "additional_fields": {
+                "write": true
+            }
+        },
+        {
+            "name": "member",
+            "apply_when": {
+                "members": "%%user.id"
+            },
+            "fields": {
+                "messages": {}
+            },
+            "read": true,
+            "write": false,
+            "insert": false,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {
+        "properties": {
+            "members": {
+                "bsonType": "array",
+                "items": {
+                    "bsonType": "string"
+                },
+                "messages": {
+                    "bsonType": "array",
+                    "items": {
+                        "bsonType": "object",
+                        "properties": {
+                            "_id": "objectId",
+                            "text": "string",
+                            "user": "string"
+                        },
+                        "required": [
+                            "_id",
+                            "user",
+                            "text",
+                        ]
+                    }
+                },
+                "name": {
+                    "bsonType": "string"
+                },
+                "uniqueItems": true
+            },
+            "owner": {
+                "bsonType": "string"
+            }
+        },
+        "required": [
+            "owner",
+            "members",
+            "name",
+            "messages"
+        ],
+        "title": "Room"
+    }
+}
