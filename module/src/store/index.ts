@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Vuex, { StoreOptions } from "vuex";
+import Vuex, { Module, StoreOptions } from "vuex";
 import { createNamespacedHelpers } from "vuex-composition-helpers";
 import { RootState } from "./state";
 
@@ -9,7 +9,7 @@ Vue.use(Vuex);
 
 const storeOptions: StoreOptions<RootState> = {
   modules: {
-    chat: chat.default,
+    chat: chat.default as Module<typeof chat.state, RootState>,
   },
 };
 
