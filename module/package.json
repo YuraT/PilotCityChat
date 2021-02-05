@@ -49,6 +49,7 @@
     "bson": "^4.2.2",
     "realm-web": "^1.2.0",
     "vue": "^2.6.12",
-    "vuetify": "^2.2.11"
+    "vuetify": "^2.2.11",
+    "vuex-composition-helpers": "^1.0.19"
   }
 }

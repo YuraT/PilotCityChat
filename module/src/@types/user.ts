@@ -1,6 +1,5 @@
 import { ObjectId } from "bson";
 
-
 // this will probably be obsolete
 // export interface UserData {
 //   userId: string;
@@ -25,14 +24,14 @@ export class ChatUser {
   }
 
   get id(): string {
-    const id = this._data[this._struct.id]
+    const id = this._data[this._struct.id];
     if (id instanceof ObjectId) {
       return id.toHexString();
     }
     return id;
   }
   get username(): string {
-    const username = this._data[this._struct.username]
+    const username = this._data[this._struct.username];
     if (!(username instanceof String)) {
       throw TypeError("username is not string");
     } else {
@@ -40,7 +39,7 @@ export class ChatUser {
     }
   }
   get profileImg(): string {
-    const profileImg = this._data[this._struct.profileImg]
+    const profileImg = this._data[this._struct.profileImg];
     if (!(profileImg instanceof String)) {
       throw TypeError("profileImg is not string");
     } else {
