@@ -6,7 +6,7 @@ type MongoCollection = globalThis.Realm.Services.MongoDB.MongoDBCollection<Mongo
 
 
 export interface Meta {
-  currentUser: Realm.User;
+  currentUser: () => Realm.User;
   userInterface: UserStruct;
   collectionUser: MongoCollection;
   collectionRoom: MongoCollection;
