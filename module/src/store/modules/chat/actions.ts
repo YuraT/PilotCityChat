@@ -1,17 +1,16 @@
 import { ActionContext, ActionTree } from "vuex";
 
-import { RootState } from "@/store/state";
 import state from "./state";
 import getters from "./getters";
 import { MutationTypes } from "./mutations";
 
-interface ActionsCtx extends ActionContext<typeof state, RootState> {
+interface ActionsCtx extends ActionContext<typeof state, never> {
   getters: {
     meta: ReturnType<typeof getters.meta>;
   };
 }
 
-interface Actions extends ActionTree<typeof state, RootState> {
+interface Actions extends ActionTree<typeof state, never> {
   setMeta: (
     ctx: ActionsCtx,
     payload: { meta: typeof state.meta }

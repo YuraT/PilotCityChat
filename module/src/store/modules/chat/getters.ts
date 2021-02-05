@@ -1,16 +1,14 @@
 import { GetterTree } from "vuex";
 
-import { RootState } from "@/store/state";
 import chatState from "./state";
 import { Meta } from "@/@types/meta";
 
 type GetterCtx<T> = (
   state: typeof chatState,
-  getters: Getters,
-  rootState: RootState
+  getters: Getters
 ) => T;
 
-export interface Getters extends GetterTree<typeof chatState, RootState> {
+export interface Getters extends GetterTree<typeof chatState, never> {
   meta: GetterCtx<Meta | undefined>;
 }
 
