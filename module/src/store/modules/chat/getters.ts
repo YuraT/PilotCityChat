@@ -1,7 +1,7 @@
 import { GetterTree } from "vuex";
 
 import chatState from "./state";
-import { Meta } from "@/@types/meta";
+import { Meta } from "../../../@types/meta";
 
 type GetterCtx<T> = (
   state: typeof chatState,

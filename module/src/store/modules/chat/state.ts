@@ -1,4 +1,4 @@
-import { StoreMeta } from "@/@types";
+import { StoreMeta } from "../../../@types";
 
 const state: {
   meta?: StoreMeta.Meta;
